@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>散文二次创作成果浏览器</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+
+        <!-- ── 左侧目录栏 ── -->
+        <aside class="sidebar" role="navigation" aria-label="成果目录">
+
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <span class="brand-seal">文</span>
+                    <div class="brand-text">
+                        <h1>散文工作台</h1>
+                        <p class="brand-sub">Prose Recreation Studio</p>
+                    </div>
+                </div>
+                <div class="stats-badge" id="stats-summary">加载中…</div>
+            </div>
+
+            <div class="filter-section">
+                <div class="search-wrapper">
+                    <svg class="search-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.4"/>
+                        <line x1="10" y1="10" x2="14" y2="14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                    </svg>
+                    <input type="text" id="search-input" placeholder="搜寻标题、作者、诗词、意象…" autocomplete="off" spellcheck="false">
+                </div>
+
+                <div class="select-group">
+                    <div class="select-wrapper">
+                        <label for="dimension-select">创作维度</label>
+                        <select id="dimension-select">
+                            <option value="">全部维度</option>
+                        </select>
+                    </div>
+                    <div class="select-wrapper">
+                        <label for="skeleton-select">骨架分类</label>
+                        <select id="skeleton-select">
+                            <option value="">全部骨架</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="quick-tags" role="group" aria-label="快速筛选">
+                    <button class="tag-btn active" data-filter="all">全部</button>
+                    <button class="tag-btn" data-filter="high-score">精品</button>
+                    <button class="tag-btn" data-filter="recent">最新</button>
+                </div>
+            </div>
+
+            <div class="list-container">
+                <div class="essay-list" id="essay-list" role="list"></div>
+            </div>
+        </aside>
+
+        <!-- ── 右侧阅读区 ── -->
+        <main class="reading-pane" id="main-content" role="main">
+
+            <!-- 欢迎页 -->
+            <div class="welcome-screen" id="welcome-screen">
+                <div class="welcome-inner">
+                    <div class="welcome-ornament">
+                        <span class="ornament-line"></span>
+                        <span class="ornament-char">散</span>
+                        <span class="ornament-line"></span>
+                    </div>
+                    <h2 class="welcome-title">散文二次创作成果浏览器</h2>
+                    <p class="welcome-quote">温润、舒缓、有呼吸感的留白<br>从极小的日常细节重新发现灵气</p>
+                    <div class="welcome-guide">
+                        <div class="guide-item">
+                            <span class="guide-dot"></span>
+                            <span>从左侧目录选择一篇散文开始阅读</span>
+                        </div>
+                        <div class="guide-item">
+                            <span class="guide-dot"></span>
+                            <span>按维度与骨架筛选，探索不同技法切面</span>
+                        </div>
+                        <div class="guide-item">
+                            <span class="guide-dot"></span>
+                            <span>右侧面板展示素材蒸馏与幕后创作轨迹</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 文章阅读区（默认隐藏） -->
+            <div class="article-viewer" id="article-viewer" style="display: none;">
+                <div class="article-viewer-body">
+
+                    <!-- 左栏：阅读主区 -->
+                    <div class="article-reading-column">
+                        <header class="article-header">
+                            <div class="article-meta-top" id="article-meta-top">
+                                <span class="meta-tag meta-dimension" id="article-dimension"></span>
+                                <span class="meta-tag meta-skeleton" id="article-skeleton"></span>
+                                <span class="meta-tag meta-score" id="article-score"></span>
+                                <span class="meta-tag meta-exit" id="article-exit" style="display:none;"></span>
+                            </div>
+                            <h1 class="article-title" id="article-title"></h1>
+                        </header>
+
+                        <!-- 原作素材框 -->
+                        <div class="original-material-box" id="article-original-material-box" style="display:none;">
+                            <div class="material-label" id="material-label"></div>
+                            <div class="material-poem-body" id="material-poem-body"></div>
+                        </div>
+
+                        <!-- 标签导航 -->
+                        <nav class="tab-navigation" role="tablist">
+                            <button class="tab-btn active" data-tab="version-c" role="tab" aria-selected="true">版本 C · 感知扩写</button>
+                            <button class="tab-btn" data-tab="final-prose" role="tab" aria-selected="false">最终成稿 · 自检</button>
+                        </nav>
+
+                        <!-- 散文正文 -->
+                        <div class="content-frame">
+                            <article class="article-content prose-body" id="article-body"></article>
+                        </div>
+                    </div>
+
+                    <!-- 右栏：幕后创作轨迹 -->
+                    <div class="article-sidebar-column" id="article-sidebar-column">
+
+                        <!-- 关键词印章 -->
+                        <div class="stamps-card" id="stamps-card">
+                            <div class="card-label">作品印章</div>
+                            <div class="stamps-flex" id="stamps-flex"></div>
+                        </div>
+
+                        <!-- 幕后创作轨迹（可折叠四栏） -->
+                        <div class="process-card" id="process-card">
+                            <div class="card-label">幕后创作轨迹</div>
+                            <div class="process-sections" id="process-sections"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
